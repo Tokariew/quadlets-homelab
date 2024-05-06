@@ -1,0 +1,21 @@
+[Unit]
+Description=Run mariadb in podman
+
+[Container]
+AutoUpdate=registry
+ContainerName=mariadb
+EnvironmentFile=%E/containers/systemd/mariadb.env
+Image=docker.io/mariadb:11
+Network=inner.network
+PodmanArgs=--network-alias=mariadb
+Secret=mysql-pass,type=env,target=MYSQL_ROOT_PASSWORD
+Secret=mysql-photo,type=env,target=MYSQL_PASSWORD
+UserNS=keep-id
+Volume=/home/tokariew/containers/data/mariadb:/var/lib/mysql:Z
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=300
+
+[Install]
+WantedBy=default.target

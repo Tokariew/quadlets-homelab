@@ -1,0 +1,25 @@
+[Unit]
+Description=Run photoprism in podman
+After=mariadb.service
+
+[Container]
+AutoUpdate=registry
+ContainerName=photoprism
+EnvironmentFile=%E/containers/systemd/photoprism.env
+Image=docker.io/photoprism/photoprism:latest
+Network=inner.network
+PodmanArgs=--network-alias=photoprism
+Secret=mysql-photo,type=env,target=PHOTOPRISM_DATABASE_PASSWORD
+Secret=photoprism-pass,type=env,target=PHOTOPRISM_ADMIN_PASSWORD
+Volume=/home/tokariew/containers/data/photoprism/cache:/photoprism/cache:Z
+Volume=/media/btrfs/Documents/Photos:/photoprism/originals:z,ro
+Volume=/media/btrfs/containers/data/photoprism/import:/photoprism/import:Z
+Volume=/media/btrfs/containers/data/photoprism/storage:/photoprism/storage:Z
+WorkingDir=/photoprism
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=300
+
+[Install]
+WantedBy=default.target
