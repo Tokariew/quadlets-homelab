@@ -1,0 +1,14 @@
+[Unit]
+Description=Run kindle price tracker in container
+
+[Container]
+AutoUpdate=registry
+ContainerName=kindleprice
+Image=registry.tokariew.xyz:5000/kindleprice:latest
+Network=lab.network
+PodmanArgs=--network-alias=kindleprice
+Volume=/home/tokariew/containers/data/kindleprice:/srv:Z
+
+[Service]
+TimeoutStartSec=300
+Type=oneshot

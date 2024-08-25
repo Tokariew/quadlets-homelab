@@ -1,0 +1,25 @@
+[Unit]
+Description=Run ntfy in podman
+
+[Container]
+AutoUpdate=registry
+ContainerName=ntfy
+Exec=serve --cache-file /var/cache/ntfy/cache.db
+HealthCmd=wget -q --tries=1 https://ntfy.lab.tokariew.xyz/v1/health -O - | grep -Eo '\"healthy\"\s*:\s*true' || exit 1
+HealthInterval=60s
+HealthOnFailure=kill
+HealthRetries=3
+HealthStartupInterval=40s
+HealthTimeout=10s
+Image=docker.io/binwiederhier/ntfy
+Network=lab.network
+PodmanArgs=--network-alias=ntfy
+Volume=/home/tokariew/containers/data/ntfy/etc:/etc/ntfy:Z
+Volume=/home/tokariew/containers/data/ntfy/var:/var/cache/ntfy:Z
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=300
+
+[Install]
+WantedBy=default.target
